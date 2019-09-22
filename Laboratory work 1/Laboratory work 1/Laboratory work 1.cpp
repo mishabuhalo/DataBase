@@ -263,6 +263,43 @@ void delete_s(string List, string Names)
 		j++;
 	}
 }
+void update_m(string List, string Names)
+{
+	int i = 0;
+	string s;
+	cout << "\nList of disciplines:\n";
+	ifstream fin(List);
+
+	while (!fin.eof())
+	{
+		fin >> i;
+		fin >> s;
+		cout << i << " " << s << endl;
+	}
+	fin.close();
+
+	cout << endl;
+
+	cout << "Choose discipline by name: ";
+	cin >> s;
+
+	int r = get_m(s, List, Length, Names) - 1;
+	cout << "Write new information for the following attribute:" << endl;
+	cout << "Count of players: ";
+	cin >> s;
+	root[r].CountOfPlayers = s;
+	int j = 0;
+	ofstream fin1(Names);
+	while (j < i)
+	{
+		
+			fin1 << root[j].Name << endl;
+			fin1 << root[j].CountOfPlayers << endl;
+			fin1 << root[j].ListOfPlayers << endl;
+		j++;
+	}
+	fin1.close();
+}
 
 int main()
 {
@@ -305,6 +342,9 @@ int main()
 			break;
 		case 6:
 			delete_s(List, Names);
+			break;
+		case 7:
+			update_m(List, Names);
 			break;
 
 		}
