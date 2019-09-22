@@ -56,7 +56,6 @@ int get_m(string id, string ind, int n, string disciplines)
 			getline(fin, root[i].CountOfPlayers);
 			getline(fin, root[i].ListOfPlayers);
 			i++;
-			getline(fin, s);
 		}
 		return position;
 	}
@@ -121,13 +120,11 @@ void insert_m(string List, string Names)
 	ofstream fin1(Names, ios::app);
 	fin1 << tmp->Name << endl;
 	fin1 << tmp->CountOfPlayers << endl;
-	fin1 << tmp->ListOfPlayers;
-	fin1 << "\n";
-	fin1 << "\n";
+	fin1 << tmp->ListOfPlayers << endl;
 	fin1.close();
 
 	ofstream fin2(List, ios::app);
-	fin2 << i << " " << tmp->Name << endl;
+	fin2 << i << " " << tmp->Name <<"\n";
 }
 void insert_s(string List, string Names)
 {
@@ -163,9 +160,108 @@ void insert_s(string List, string Names)
 	ofstream fin1(temp, ios::app);
 	fin1 << tempr->Name << endl;
 	fin1 << tempr->Role << endl;
-	fin1 << tempr->Nickname << endl <<endl;
+	fin1 << tempr->Nickname << endl;
 	fin1.close();
 
+}
+
+void delete_m(string List, string Names)
+{
+	int i;
+	string s;
+	cout << "\nList of disciplines:\n";
+	ifstream fin(List);
+	while (!fin.eof())
+	{
+		fin >> i;
+		fin >> s;
+		cout << i <<" " << s << endl;
+	}
+	cout << endl;
+	fin.close();
+	cout << "Choose discipline by name: ";
+	cin >> s;
+
+	int r = get_m(s, List, Length, Names) - 1;
+	root[r].Name = "";
+	root[r].CountOfPlayers = "";
+	root[r].ListOfPlayers = "";
+
+	int j = 0;
+	ofstream fin1(Names);
+	while (j < i)
+	{
+		if (j != r)
+		{
+			fin1 << root[j].Name << endl;
+			fin1 << root[j].CountOfPlayers << endl;
+			fin1 << root[j].ListOfPlayers << endl;
+		}
+		j++;
+	}
+	fin1.close();
+}
+void delete_s(string List, string Names)
+{
+	int i;
+	string s;
+	string k;
+	cout << "\nList of disciplines:\n";
+	ifstream fin(List);
+
+	while (!fin.eof())
+	{
+		fin >> i;
+		fin >> s;
+		cout << i << " " << s << endl;
+	}
+	fin.close();
+
+	cout << endl;
+
+	cout << "Choose discipline by name: ";
+	cin >> s;
+
+	int r = get_m(s, List, Length, Names)-1;
+
+	string a = root[r].ListOfPlayers;
+
+	ifstream fin2(a);
+	cout << "List of players: ";
+	i = 0;
+	while (!fin2.eof())
+	{
+		getline(fin2, rootp[i].Name);
+		cout << "Name: " << rootp[i].Name << endl;
+		getline(fin2, rootp[i].Nickname);
+		cout << "Nickname: " << rootp[i].Nickname << endl;
+		getline(fin2, rootp[i].Role);
+		cout << "Role: " << rootp[i].Role << endl;
+		i++;
+
+	}
+	fin2.close();
+
+	cout << "Choose player by name: ";
+	cin >> k;
+	int j = 0;
+	int l = get_s(s, List, Length, Names, k);
+	rootp[l].Name = "";
+	rootp[l].Role = "";
+	rootp[l].Nickname = "";
+
+	ofstream fin1(a);
+
+	while (j < i)
+	{
+		if (j != l)
+		{
+			fin1 << rootp[j].Name << "\n";
+			fin1 << rootp[j].Nickname << "\n";
+			fin1 << rootp[j].Nickname << "\n";
+		}
+		j++;
+	}
 }
 
 int main()
@@ -203,6 +299,12 @@ int main()
 			u = get_s(s, List, Length, Names, p);
 			cout <<"Nickname: "<< rootp[u].Nickname << endl;
 			cout <<"Role: " << rootp[u].Role << endl;
+			break;
+		case 5:
+			delete_m(List, Names);
+			break;
+		case 6:
+			delete_s(List, Names);
 			break;
 
 		}
