@@ -63,6 +63,32 @@ int get_m(string id, string ind, int n, string disciplines)
 	else return -1;
 }
 
+int get_s(string id, string ind, int n, string Names, string name)
+{
+	int i = 0, position = 0;
+	string buff;
+	bool flag = false;
+
+	int t = get_m(id, ind, Length, Names) - 1;
+	buff = root[t].ListOfPlayers;
+	ifstream fin(buff);
+	while (!fin.eof())
+	{
+		getline(fin, rootp[i].Name);
+		if (rootp[i].Name == name)
+		{
+			flag = true;
+			position = i;
+		}
+		getline(fin, rootp[i].Role);
+		getline(fin, rootp[i].Nickname);
+		i++;
+	}
+	if (flag)
+		return position;
+	else return -1;
+}
+
 void insert_m(string List, string Names)
 {
 	Discipline *tmp = new Discipline;
@@ -133,13 +159,11 @@ void insert_s(string List, string Names)
 	cout << endl;
 	cout << "Nickname: ";
 	cin >> tempr->Nickname;
-	cout << endl;
-	cout << endl;
 
 	ofstream fin1(temp, ios::app);
 	fin1 << tempr->Name << endl;
 	fin1 << tempr->Role << endl;
-	fin1 << tempr->Nickname << endl;
+	fin1 << tempr->Nickname << endl <<endl;
 	fin1.close();
 
 }
@@ -148,10 +172,12 @@ int main()
 {
 	string List = "DisciplinesNameList";
 	string Names = "DisciplinesInfo";
+	string p, s;
 	int a = 1;
+	int r, o, u;
 	while (a != 0)
 	{
-		cout << "Add discipline(1)\n Add player(2)\n Get discipline(3)\n Get player(4)\n Delete discipline(5)\n Delete player(6)\n Update discipline(7)\n Exit(0)\n";
+		cout << "\nAdd discipline(1)\nAdd player(2)\nGet discipline(3)\nGet player(4)\nDelete discipline(5)\nDelete player(6)\nUpdate discipline(7)\nExit(0)\n";
 		cin >> a;
 		switch (a)
 		{
@@ -161,6 +187,24 @@ int main()
 		case 2:
 			insert_s(List, Names);
 			break;
+		case 3:
+			cout << "Discipline Name: ";
+			cin >> s;
+			r = get_m(s, List, Length, Names) - 1;
+			cout <<"Count of players: "<< root[r].CountOfPlayers << endl;
+			cout <<"File with players: " <<  root[r].ListOfPlayers << endl;
+			break;
+		case 4:
+			cout << "Discipline Name: ";
+			cin >> s;
+			o = get_m(s, List, Length, Names) - 1;
+			cout << "\nPlayer Name: ";
+			cin >> p;
+			u = get_s(s, List, Length, Names, p);
+			cout <<"Nickname: "<< rootp[u].Nickname << endl;
+			cout <<"Role: " << rootp[u].Role << endl;
+			break;
+
 		}
 	}
 }
