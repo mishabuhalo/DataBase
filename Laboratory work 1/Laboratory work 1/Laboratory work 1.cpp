@@ -12,7 +12,7 @@ const int SizeOfUsers = 10;
 struct Discipline
 {
 	string Name;
-	int CountOfPlayers;
+	string CountOfPlayers;
 	string ListOfPlayers;
 };
 
@@ -25,6 +25,43 @@ struct Players
 
 Discipline *root = new Discipline[SizeOfUsers];
 Players *rootp = new Players[SizeOfUsers];
+
+int get_m(string id, string ind, int n, string disciplines)
+{
+	int i = 0, position = 0;
+	string s;
+	bool flag = false;
+
+	ifstream fin(ind);
+	while (!fin.eof())
+	{
+		fin >> i;
+		fin >> s;
+
+		if (s == id)
+		{
+			flag = true;
+			position = i;
+		}
+	}
+	fin.close();
+
+	if (flag)
+	{
+		i = 0;
+		ifstream fin(disciplines);
+		while (!fin.eof())
+		{
+			getline(fin, root[i].Name);
+			getline(fin, root[i].CountOfPlayers);
+			getline(fin, root[i].ListOfPlayers);
+			i++;
+			getline(fin, s);
+		}
+		return position;
+	}
+	else return -1;
+}
 
 void insert_m(string List, string Names)
 {
@@ -42,13 +79,17 @@ void insert_m(string List, string Names)
 	bool flag = false;
 
 	ifstream fin(List);
-	while (!fin.eof())			
+	if (!fin.fail())
 	{
-		fin >> i;
-		fin >> s;
+		while (!fin.eof())
+		{
+			fin >> i;
+			fin >> s;
+		}
+		fin.close();
 	}
 
-	fin.close();
+	
 	i += 1;
 
 	ofstream fin1(Names, ios::app);
@@ -61,6 +102,46 @@ void insert_m(string List, string Names)
 
 	ofstream fin2(List, ios::app);
 	fin2 << i << " " << tmp->Name << endl;
+}
+void insert_s(string List, string Names)
+{
+	int i, r;
+	string s;
+	cout << "List of disciplines:" << endl;
+	ifstream fin(List);
+	if (!fin.fail())
+	{
+		while (!fin.eof())
+		{
+			fin >> i;
+			fin >> s;
+			cout << i << " " << s << endl;
+		}
+		cout << endl;
+	}
+	cout << "Choose discipline by name : ";
+	cin >> s;
+	r = get_m(s, List, Length, Names) - 1;
+	string temp = root[r].ListOfPlayers;
+
+	Players *tempr = new Players;
+	cout << "Name: ";
+	cin >> tempr->Name;
+	cout << endl;
+	cout << "Role: ";
+	cin >> tempr->Role;
+	cout << endl;
+	cout << "Nickname: ";
+	cin >> tempr->Nickname;
+	cout << endl;
+	cout << endl;
+
+	ofstream fin1(temp, ios::app);
+	fin1 << tempr->Name << endl;
+	fin1 << tempr->Role << endl;
+	fin1 << tempr->Nickname << endl;
+	fin1.close();
+
 }
 
 int main()
@@ -77,7 +158,9 @@ int main()
 		case 1:
 			insert_m(List, Names);
 			break;
-
+		case 2:
+			insert_s(List, Names);
+			break;
 		}
 	}
 }
